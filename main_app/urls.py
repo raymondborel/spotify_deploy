@@ -8,5 +8,8 @@ urlpatterns = [
     path('artists/', views.ArtistList.as_view(), name="artist_list"),
     path('songs/', views.SongList.as_view(), name="song_list"),
     # This is telling me if I hit the URL artists/new, I should see a class named ArtistCreate in the views
-    path('artists/new/', views.ArtistCreate.as_view(), name="artist_create")
+    path('artists/new/', views.ArtistCreate.as_view(), name="artist_create"),
+    path('artists/<int:pk>/', views.ArtistDetail.as_view(), name="artist_detail"),
+    path('artists/<int:pk>/update', views.ArtistUpdate.as_view(), name="artist_update"),
+    path('artists/<int:pk>/delete', views.ArtistDelete.as_view(), name="artist_delete"),
 ]

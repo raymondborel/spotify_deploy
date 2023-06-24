@@ -78,7 +78,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'spotify',
-        'PASSWORD': 'your-password-here'
+        'PASSWORD': 'Pineapplez01!'
     }
 }
 

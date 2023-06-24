@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from .models import Artist
 # This will import the class we are extending 
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
+from django.views.generic import DetailView
 
 # Create your views here.
 # I created a class named Home that's a child of TemplateView and is inheriting what's built into the parent class
@@ -51,3 +52,18 @@ class ArtistList(TemplateView):
         else:
             context["artists"] = Artist.objects.all()
         return context
+    
+class ArtistDetail(DetailView):
+    model = Artist
+    template_name = "artist_detail.html"
+
+class ArtistUpdate(UpdateView):
+    model = Artist
+    fields = ['name', 'img', 'bio', 'verified_artist']
+    template_name = "artist_update.html"
+    success_url = '/artists/'
+
+class ArtistDelete(DeleteView):
+    model = Artist
+    template_name = "artist_delete_confirmation.html"
+    success_url = '/artists/'
