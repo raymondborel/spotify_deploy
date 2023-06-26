@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from .models import Artist
+from django.shortcuts import redirect
+from .models import Artist, Song
 # This will import the class we are extending 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic import DetailView
+from django.views import View
 
 # Create your views here.
 # I created a class named Home that's a child of TemplateView and is inheriting what's built into the parent class
@@ -18,18 +19,16 @@ class SongList(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["songs"] = songs
+        context["songs"] = Song.objects.all()
         return context
-
-class Song:
-    def __init__(self, title, album):
-        self.title = title
-        self.album = album
-
-songs = [
-    Song("Lost", "stressed & depressed by The Circle Sessions"),
-    Song("Never Ending Song", "Never Ending Song")
-]
+    
+class SongCreate(View):
+    def post(self, request, pk):
+        title = request.POST.get('title')
+        length = request.POST.get('length')
+        artist = Artist.objects.get(pk=pk)
+        Song.objects.create(title=title, length=length, artist=artist)
+        return redirect('artist_detail', pk=pk)
 
 class ArtistCreate(CreateView):
     model = Artist
