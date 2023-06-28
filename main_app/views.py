@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from .models import Artist, Song
+from .models import Artist, Song, Playlist
 # This will import the class we are extending 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
@@ -10,6 +10,11 @@ from django.views import View
 # I created a class named Home that's a child of TemplateView and is inheriting what's built into the parent class
 class Home(TemplateView):
     template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["playlists"] = Playlist.objects.all()
+        return context
 
 class About(TemplateView):
     template_name = "about.html"
@@ -56,6 +61,11 @@ class ArtistDetail(DetailView):
     model = Artist
     template_name = "artist_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["playlists"] = Playlist.objects.all()
+        return context
+
 class ArtistUpdate(UpdateView):
     model = Artist
     fields = ['name', 'img', 'bio', 'verified_artist']
@@ -66,3 +76,12 @@ class ArtistDelete(DeleteView):
     model = Artist
     template_name = "artist_delete_confirmation.html"
     success_url = '/artists/'
+
+class PlaylistSongAssoc(View):
+    def get(self, request, pk, song_pk):
+        assoc = request.GET.get("assoc")
+        if assoc == "remove":
+            Playlist.objects.get(pk=pk).songs.remove(song_pk)
+        if assoc == "add":
+            Playlist.objects.get(pk=pk).songs.add(song_pk)
+        return redirect('home')
