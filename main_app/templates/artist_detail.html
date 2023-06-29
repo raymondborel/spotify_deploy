@@ -21,10 +21,23 @@
             {% csrf_token %}
             <div class="field has-addons">
                 <div class="control">
-                    <input class="input" type="text" name="title" placeholder="Title" required />
+                    <input
+                        class="input"
+                        type="text"
+                        name="title"
+                        placeholder="Title"
+                        required
+                    />
                 </div>
                 <div class="control">
-                    <input class="input" type="number" name="length" placeholder="Length in Seconds" min="1" required />
+                    <input
+                        class="input"
+                        type="number"
+                        name="length"
+                        placeholder="Length in Seconds"
+                        min="1"
+                        required
+                    />
                 </div>
                 <div class="control">
                     <input class="button is-primary" type="submit" value="Add Song" />
@@ -49,7 +62,7 @@
                     <div class="dropdown-menu" id="dropdown-menu" role="menu">
                         <div class="dropdown-content">
                             {% for playlist in playlists %}
-                            <a href="{% url 'playlist_song_assoc' playlist.pk song.pk %}?assoc=add" class="dropdown-item">{{playlist.title}}</a>
+                            <a href="{% url 'playlist_song_assoc' playlist.pk song.pk %}?assoc=add" class="dropdown-item">{{ playlist.title }}</a>
                             {% endfor %}
                         </div>
                     </div>
