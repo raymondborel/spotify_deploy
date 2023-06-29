@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
+environ.Env()
+environ.Env.read_env()
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-cuko6mb&dz47h$afcp1r#f-y8iwb_lhl47mc#437n#b#5zs6il'
+SECRET_KEY = os.environ.get('SECRET_KEY', default='zxcvadfsg2134411@!@#$')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -70,16 +78,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'spotify_project.wsgi.application'
 
+CORS_ALLOWED_ORIGINS = True
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# To use Neon with Django, you have to create a Project on Neon and specify the project connection settings in your settings.py in the same way as for standalone Postgres.
+
+# To use Neon with Django, you have to create a Project on Neon and specify the project connection settings in your settings.py in the same way as for standalone Postgres.
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spotify',
-        'PASSWORD': 'Pineapplez01!'
-    }
+      'default': dj_database_url.config(
+        conn_max_age=600,
+        conn_health_checks=True,
+    ),
+#       {
+#     'ENGINE': 'django.db.backends.postgresql',
+#     'NAME': 'spotify',
+#     'USER': os.environ['DB_USER'],
+#     'PASSWORD': os.environ['DB_PW'],
+#     'HOST': os.environ['DB_HOST'],
+#     'PORT': '5432',
+#     'OPTIONS': {'sslmode': 'require'}
+#   }
 }
 
 
